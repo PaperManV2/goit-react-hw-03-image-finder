@@ -33,7 +33,7 @@ export class App extends Component {
     this.setState({ images });
 
     document.addEventListener('keydown', e => {
-      if (e.code == 'Escape') {
+      if (e.code === 'Escape') {
         this.setState({ SelectedPicture: '' });
       }
     });
@@ -48,13 +48,13 @@ export class App extends Component {
       `https://pixabay.com/api/?q=${query}&page=${page}&key=${secretKey}&image_type=photo&orientation=horizontal&per_page=12`
     );
     if (!response.ok) {
-      if (response.status == 404) {
+      if (response.status === 404) {
         Notiflix.Notify.failure('Oops, there is no pictures with that name');
       }
       throw new Error(response.status);
     }
     const result = await response.json();
-    if (result.total == 0) {
+    if (result.total === 0) {
       Notiflix.Notify.failure('Oops, there is no pictures with that name');
     }
     this.setState({ isLoading: false });
@@ -94,7 +94,8 @@ export class App extends Component {
 
         const prevImages = this.state.images;
 
-        this.setState({ images: [], images: [...prevImages, ...images] });
+        this.setState({ images: [] });
+        this.setState({ images: [...prevImages, ...images] });
       }
     );
   }
@@ -117,7 +118,7 @@ export class App extends Component {
         ) : (
           ''
         )}
-        {SelectedPicture != '' ? (
+        {SelectedPicture !== '' ? (
           <Modal largeImageURL={SelectedPicture} hideModal={this.hideModal} />
         ) : (
           ''
