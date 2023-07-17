@@ -17,6 +17,7 @@ export class App extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.handleLoadMore = this.handleLoadMore.bind(this);
   }
 
   state = {
@@ -25,6 +26,7 @@ export class App extends Component {
     error: '',
     currentPage: 1,
     SelectedPicture: '',
+    query: '',
   };
 
   async componentDidMount() {
@@ -41,6 +43,8 @@ export class App extends Component {
   async componentDidUpdate() {}
 
   getImages = async (query, page) => {
+    this.setState({ isLoading: true });
+
     const response = await fetch(
       `https://pixabay.com/api/?q=${query}&page=${page}&key=${secretKey}&image_type=photo&orientation=horizontal&per_page=12`
     );
@@ -54,24 +58,23 @@ export class App extends Component {
     if (result.total == 0) {
       Notiflix.Notify.failure('Oops, there is no pictures with that name');
     }
+    this.setState({ isLoading: false });
     return result.hits;
   };
 
-  async handleSubmit(event) {
+  handleSubmit = async event => {
     event.preventDefault();
 
-    this.setState({ images: [] });
-
     const form = event.currentTarget;
-    const query = form.elements.query.value;
+    const formQuery = form.elements.query.value;
 
-    if (query != '') {
-      const images = await this.getImages(query, 1);
-      this.setState({ images });
+    if (formQuery !== '') {
+      const images = await this.getImages(formQuery, 1);
+      this.setState({ images, query: formQuery });
     } else {
-      Notiflix.Notify.failure('Oops, there is no pictures with that name');
+      Notiflix.Notify.failure('Oops, there are no pictures with that name');
     }
-  }
+  };
 
   handleModal(URL) {
     this.setState({ SelectedPicture: URL });
@@ -79,6 +82,22 @@ export class App extends Component {
 
   hideModal() {
     this.setState({ SelectedPicture: '' });
+  }
+
+  handleLoadMore() {
+    this.setState(
+      prevState => ({ currentPage: prevState.currentPage + 1 }),
+      async () => {
+        const images = await this.getImages(
+          this.state.query,
+          this.state.currentPage + 1
+        );
+
+        const prevImages = this.state.images;
+
+        this.setState({ images: [], images: [...prevImages, ...images] });
+      }
+    );
   }
 
   render() {
@@ -94,7 +113,11 @@ export class App extends Component {
           ''
         )}
         {isLoading ? <Loader /> : ''}
-        {images.length > 0 ? <Button /> : ''}
+        {images.length > 0 ? (
+          <Button handleLoadMore={this.handleLoadMore} />
+        ) : (
+          ''
+        )}
         {SelectedPicture != '' ? (
           <Modal largeImageURL={SelectedPicture} hideModal={this.hideModal} />
         ) : (
