@@ -1,6 +1,4 @@
 import css from './ImageGallery.module.css';
-import { Modal } from '../Modal/Modal';
-import PropTypes from 'prop-types';
 
 export const ImageGallery = ({ images, onClick }) => {
   return (

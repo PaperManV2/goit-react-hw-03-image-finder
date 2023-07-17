@@ -1,5 +1,4 @@
 import css from './Modal.module.css';
-import PropTypes from 'prop-types';
 
 export const Modal = ({ largeImageURL, hideModal }) => {
   const handleModalClick = () => {

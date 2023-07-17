@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import css from './App.module.css';
-import PropTypes from 'prop-types';
 import Notiflix from 'notiflix';
 
 import { Loader } from './Loader/Loader';
