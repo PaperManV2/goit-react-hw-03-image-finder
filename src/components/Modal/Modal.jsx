@@ -8,7 +8,7 @@ export const Modal = ({ largeImageURL, hideModal }) => {
   return (
     <div className={css.overlay} onClick={handleModalClick}>
       <div className={css.modal} style={{ pointerEvents: 'none' }}>
-        <img src={largeImageURL} alt="big picture" />
+        <img src={largeImageURL} alt="big" />
       </div>
     </div>
   );

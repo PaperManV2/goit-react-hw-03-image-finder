@@ -25,7 +25,7 @@ const ImageGalleryItem = ({ webFormatURL, onClick }) => {
         className="img"
         src={webFormatURL}
         onClick={handleItemClick}
-        alt="small picture"
+        alt="Small"
       />
     </li>
   );
