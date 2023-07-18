@@ -89,7 +89,7 @@ export class App extends Component {
       async () => {
         const images = await this.getImages(
           this.state.query,
-          this.state.currentPage + 1
+          this.state.currentPage
         );
 
         const prevImages = this.state.images;
